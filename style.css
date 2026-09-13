@@ -1,0 +1,1038 @@
+/* Hallmark · pre-emit critique: P5 H4 E4 S5 R4 V4
+ * theme: custom (neutral grey accent, dashed-pill nav — see audit note below)
+ * macrostructure: index = Dashed-pill Nav + Marquee Hero (inline morph blob) + Editorial Work Rail + About + Contact CTA + Footer
+ *                  work-cloudlex, recordxtract = Case Study Long-form (shared .cs-* components) · beliefs = Numbered Manifesto
+ * audit note: original stamp claimed a "tan accent" source screenshot; shipped tokens were neutral grey.
+ *             Resolved 2026-09-06 against updated Figma spec (node 341-8665): accent is blue (#1261FE), not tan.
+ * tokens locked below — no inline hex/rgb permitted outside this block. Case-study palette lives in its own
+ * block below so every case study (CloudLex, RecordXtract, and future ones) draws from the same system.
+ */
+@font-face{ font-family:'Satoshi'; src:url('fonts/Satoshi-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+@font-face{ font-family:'Satoshi'; src:url('fonts/Satoshi-Medium.woff2') format('woff2'); font-weight:500; font-style:normal; font-display:swap; }
+@font-face{ font-family:'Satoshi'; src:url('fonts/Satoshi-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+@font-face{ font-family:'Satoshi'; src:url('fonts/Satoshi-Black.woff2') format('woff2'); font-weight:900; font-style:normal; font-display:swap; }
+
+:root{
+  --paper: #FFFFFF;
+  --paper-raised: #FFFFFF;
+  --placeholder-bg: #D9D9D9;
+  --ink: #363839;
+  --ink-secondary: #6B6C6D;
+  --ink-muted: #9A9B9C;
+  --accent: #1261FE;
+  --accent-soft: #EFEFEE;
+  --accent-ink: #6B6C6D;
+  --line: #E0E0E0;
+  --line-strong: #D2D2D0;
+
+  --font-display: 'Satoshi', -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-sans: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --container: 1120px;
+  --gutter: clamp(24px, 5vw, 64px);
+  --dur: 0.4s;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --sp-1: 8px;
+  --sp-2: 16px;
+  --sp-3: 24px;
+  --sp-4: 32px;
+  --sp-5: 48px;
+  --sp-6: 64px;
+  --sp-7: 108px;
+  --sp-8: 150px;
+
+  /* ---- Case-study palette (shared across every long-form case study) ---- */
+  --case-navy: #2B3A67;
+  --case-band-bg: #FAFAFA;
+  --case-gap: 100px;
+
+  --case-blue-bg: #EAF5FA;
+  --case-blue-border: #8FC7E0;
+  --case-purple-bg: #F5EEFC;
+  --case-purple-border: #C9A9EA;
+  --case-cyan-bg: #EFF8F8;
+  --case-cyan-border: #94CDE9;
+
+  --case-mint: #97DBB6;
+  --case-mint-soft: #EAF5F0;
+  --case-mint-border: #8FCBAE;
+  --case-coral: #F49C9C;
+  --case-coral-soft: #FBE7E7;
+  --case-coral-border: #E8A3A3;
+
+  --case-role-blue: #B4E6FD;
+  --case-role-purple: #D7ABFF;
+  --case-role-grey: #D5D5D5;
+  --case-role-tan: #ECD5A5;
+  --case-role-teal: #9CDDE6;
+
+  /* Problem-flagging callouts: solid tint, no border — distinct from the dashed
+     "solution" callouts, so a reader can tell at a glance which kind they're looking at. */
+  --case-problem-bg: rgba(232,62,65,.25);
+  --case-problem-line: rgba(232,62,65,.4);
+
+  /* ---- Status / media (hero intro blob) ---- */
+  --status-online: #3AA76D;
+  --video-dark: #14212B;
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; overflow-x: clip; }
+body{ overflow-x: clip; }
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+body{
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a{ color: inherit; text-decoration: none; }
+img{ max-width: 100%; display: block; }
+button{ font-family: inherit; cursor: pointer; }
+
+::selection{ background: var(--accent); color: var(--paper); }
+
+:focus-visible{
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.wrap{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ---------- Type ---------- */
+.mono{ font-family: var(--font-mono); }
+/* Exact spec pulled via get_design_context on node 420:1016 (2026-09-12), checked globally:
+   Satoshi Medium, 14px, no letter-spacing, ink at 50% opacity (== var(--ink-muted), confirmed
+   equivalent) — was shipped at 13px with 0.02em tracking. This is the single spec for every
+   eyebrow site-wide; the special-cased 14px/Regular/no-tracking override that used to exist for
+   "Design principles"/"Learnings" headings (based on an earlier, narrower Figma reading) is
+   removed below in favor of this one uniform rule. */
+.eyebrow{
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: normal;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+}
+h1,h2,h3{ margin: 0; font-weight: 700; font-family: var(--font-display); overflow-wrap: anywhere; min-width: 0; }
+p{ margin: 0; }
+
+/* ---------- Nav ----------
+   Icon-only pill, right-aligned, pulled exactly via get_design_context on node 360:3874
+   (2026-09-06) — logo left, pill right. No box-shadow (none in spec). Icons are Lucide
+   briefcase-business/user-round/brain/file-text (NOT receipt-text — corrected from an
+   earlier guess), 16x16, stroke #7F8188 baked into each asset. */
+.site-nav-inner{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px var(--gutter);
+}
+.site-logo{
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+}
+.site-logo svg{ width: 100%; height: 100%; display: block; }
+.nav-pill{
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #E7E7E7;
+}
+.nav-pill a{
+  display: inline-flex;
+  transition: opacity var(--dur) var(--ease);
+}
+.nav-pill a:hover{ opacity: 0.6; }
+.nav-pill svg{ width: 16px; height: 16px; display: block; }
+
+/* ---------- Buttons / tags ---------- */
+.tag{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 100px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+.tag--muted{
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  color: var(--ink-secondary);
+}
+.btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  padding: 11px 18px;
+  border-radius: 6px;
+  background: var(--paper-raised);
+  transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.btn:hover{ border-color: var(--ink); transform: translateY(-1px); }
+.btn-arrow{ transition: transform var(--dur) var(--ease); }
+.btn:hover .btn-arrow{ transform: translateX(3px); }
+
+/* ---------- Dashed divider (full-bleed) ----------
+   Exact spec pulled via get_design_context on node 360:4136 (2026-09-11): the Figma vector is
+   stroke="#E0E0E0" stroke-dasharray="4 4" — a 4px dash / 4px gap. Was shipped as a much looser
+   10px dash / 10px gap pattern (background-size: 20px), fixed via an 8px repeat unit below. */
+.divider{
+  width: 100%;
+  height: 1px;
+  background-image: linear-gradient(90deg, var(--line) 50%, transparent 50%);
+  background-size: 8px 1px;
+  background-repeat: repeat-x;
+}
+
+/* ---------- Reveal on scroll ---------- */
+.reveal{
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.reveal.is-visible{ opacity: 1; transform: translateY(0); }
+
+/* ---------- Footer ----------
+   Exact spec pulled via get_design_context on node 360:3866 (2026-09-06): both the link row
+   and the "designed by" note are Satoshi Medium 14px, ink at 50% opacity (== var(--ink-muted)),
+   no letter-spacing — was shipped at 12.5px/0.03em tracking, with the links row a step darker
+   (--ink-secondary) than the note instead of matching it exactly. */
+/* Figma (node 420:1208, 2026-09-12) specs a 16px gap between the contact heading and this
+   footer row — was shipped at ~80-140px (each page's own .contact-block bottom padding
+   plus this top padding stacking together). Set to 32px per direct instruction instead of
+   the literal 16px spec. */
+.site-footer{
+  padding: 32px 0 48px;
+}
+.site-footer .wrap{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-links{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  list-style: none;
+  margin: 0; padding: 0;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.footer-links a:hover{ color: var(--accent); }
+.footer-note{
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* ---------- Contact CTA lead-in (shared: index, beliefs, every case study) ---------- */
+.contact-heading{
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  font-family: var(--font-display);
+  color: var(--ink);
+}
+
+/* ---------- Case study components (shared: work-cloudlex, recordxtract, future case studies) ---------- */
+/* Topbar pulled via get_design_context on node 360:4284 (2026-09-06) — exact spec, not inferred:
+   both pills are `background:#E7E7E7; border-radius:100px; padding:8px 16px` with NO drop shadow.
+   Both icons (Lucide arrow-left / x, 16px) have color #7F8188 baked into the asset itself at full
+   opacity; only the "Close" text label carries `opacity:.5` — the icon next to it does not fade. */
+.cs-topbar{
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 32px 0 0;
+}
+.cs-back, .cs-close{
+  display: inline-flex; align-items: center;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #E7E7E7;
+}
+.cs-back{ justify-content: center; }
+.cs-close{ gap: 8px; }
+.cs-back svg, .cs-close svg{ width: 16px; height: 16px; display: block; flex-shrink: 0; }
+.cs-close-label{
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.5;
+  transition: opacity var(--dur) var(--ease);
+}
+.cs-close:hover .cs-close-label{ opacity: 0.8; }
+
+.cs-hero{ padding: 40px 0 0; }
+/* Exact spec pulled via get_design_context on node 44:75 / 360:4113 (2026-09-11): title is a
+   fixed 48px/1.2 with no line-length cap (was a fluid clamp topping out at 46px, 1.18 line-height,
+   -0.015em tracking, and a 20ch cap). Meta row is full-width with a 16px gap (was capped at
+   640px with a 24px gap), sits 32px below the title (was 48px), and each label→value pair has
+   a 7px gap (was 16px) with a 14px label (was 12px) and a 20px/1.2 value (was 17px, no line-height).
+   Value size later revised down to 18px per node 420:992 (2026-09-12) — a type-hierarchy update
+   applied globally across all case study heroes. */
+.cs-title{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-top: 28px;
+}
+.cs-meta{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 16px;
+  margin-top: 32px;
+  padding-bottom: 48px;
+}
+.cs-meta-label{
+  font-family: var(--font-sans); font-weight: 500; font-size: 14px;
+  text-transform: uppercase; color: var(--ink-muted);
+  margin-bottom: 7px;
+}
+.cs-meta-value{ font-family: var(--font-sans); font-weight: 500; font-size: 18px; line-height: 1.2; color: var(--ink); }
+
+.cs-section{ padding: 0; }
+.cs-section-first{ padding-top: var(--sp-6); }
+.cs-lede{
+  /* Exact spec pulled via get_design_context on node 162:1633/162:1636 (2026-09-10): body
+     copy runs the full width of its container (min-w-full, no line-length cap) — was
+     shipped with a max-width: 68ch readability cap that clipped it short of the container. */
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 19px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.cs-lede + .cs-lede{ margin-top: 16px; }
+/* ---- Bulleted body copy (Figma: node 420:1015) — same voice/rhythm as .cs-lede,
+   just with disc markers for a short list of questions/points within a lede block. ---- */
+.cs-list{
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 19px;
+  line-height: 1.65;
+  color: var(--ink);
+  margin-top: 16px;
+  padding-left: 22px;
+}
+.cs-lede + .cs-list{ margin-top: 16px; }
+.cs-eyebrow{ margin-bottom: 16px; }
+.cs-block{ margin-top: 0; }
+.cs-block + .cs-block{ margin-top: var(--case-gap); }
+
+/* Uniform rhythm between every top-level block in a case study's flow, regardless of
+   whether it's a text section or a full-bleed screenshot band. Scoped to .cs-main so it
+   never leaks onto index/beliefs, whose <main> uses its own section rhythm. */
+.cs-main > * + *{ margin-top: var(--case-gap); }
+
+/* ---- Persona / stakeholder split ---- */
+.persona-split{
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  background: var(--case-band-bg);
+  border-radius: 24px;
+  margin-top: 40px;
+  overflow: hidden;
+}
+.persona-split::before{
+  content: '';
+  position: absolute;
+  left: 50%; top: 48px; bottom: 48px;
+  width: 0;
+  border-left: 1px dashed var(--line-strong);
+}
+.persona-col{ padding: 56px 48px; }
+.persona-icon{ height: 64px; width: auto; margin-bottom: 32px; display: block; }
+.persona-role{
+  font-family: var(--font-sans); font-weight: 700; font-size: 12.5px;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-secondary);
+  margin-bottom: 16px;
+}
+.persona-quote{
+  font-family: var(--font-display); font-weight: 700; font-size: 22px;
+  color: var(--ink); line-height: 1.3;
+}
+.persona-note{
+  margin-top: 16px; font-size: 14.5px; font-weight: 500; color: var(--ink-secondary); line-height: 1.55; max-width: 34ch;
+}
+@media (max-width: 760px){
+  .persona-split{ grid-template-columns: 1fr; }
+  .persona-split::before{ display: none; }
+  .persona-col{ padding: 40px 32px; }
+}
+
+/* ---- Full-panel reference image (icon + copy baked in, transparent-cornered PNG) ---- */
+.cs-diagram-img{ display: block; width: 100%; margin-top: 40px; }
+
+/* ---- True edge-to-edge breakout — image runs the full viewport width, container height
+   matches the image exactly (no band padding/background, unlike .cs-band). html/body already
+   set overflow-x:clip so the 100vw breakout can't introduce horizontal scroll. ---- */
+.cs-fullbleed{
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  margin-top: var(--case-gap);
+}
+.cs-fullbleed .cs-diagram-img{ margin-top: 0; }
+
+/* ---- Design principles: 3-up grid variant ----
+   No margin-top here: .cs-eyebrow already carries the label→content gap (16px, confirmed
+   against Figma). Adding one here too double-spaced every "Design principles"/"Learnings"
+   heading site-wide (48px shipped vs. the 16px every pulled Figma frame actually specifies). */
+.principles-grid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 32px 40px;
+}
+.principle-title{ font-family: var(--font-display); font-weight: 700; font-size: 18px; line-height: 1.2; color: var(--ink); }
+.principle-desc{ margin-top: 8px; font-size: 18px; font-weight: 500; color: var(--ink); line-height: 1.2; }
+@media (max-width: 720px){ .principles-grid{ grid-template-columns: 1fr; } }
+
+/* ---- Design principles: stacked-list variant ---- */
+.principles-list{ display: flex; flex-direction: column; gap: 32px; max-width: 68ch; }
+
+/* ---- Final shipped: phone walkthrough beside what-changed notes ----
+   Exact spec pulled via get_design_context on node 360:4048 (2026-09-06): the label is Bold
+   16px at 50% opacity — NOT the small-caps .eyebrow treatment it borrowed before — and each
+   note is Bold 20px title + Medium 16px body at 80% opacity (not full ink), with a large
+   100px gap between separate note blocks (not the 32px .principles-list uses). */
+.final-shipped{
+  display: grid;
+  grid-template-columns: 300px minmax(0, 420px);
+  gap: 48px;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+.final-shipped-label{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ink);
+  opacity: .5;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.final-shipped-notes{ display: flex; flex-direction: column; gap: 100px; max-width: 350px; }
+.final-shipped-title{ font-family: var(--font-display); font-weight: 700; font-size: 20px; color: var(--ink); }
+.final-shipped-desc{ margin-top: 11px; font-family: var(--font-sans); font-weight: 500; font-size: 16px; color: var(--ink); opacity: .8; line-height: 1.5; }
+@media (max-width: 760px){
+  .final-shipped{ grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .final-shipped-notes{ gap: 48px; }
+}
+
+/* ---- Screenshot bands (full-bleed) ----
+   For screenshots/diagrams wide enough to break out of the text column (Figma: w-1280,
+   e.g. "Our solve", before/after comparisons). Contained ones use .cs-panel below instead —
+   .cs-band's own 72px padding is specifically sized for a full-bleed moment and stacks
+   wrongly with any margin-top set on it if reused for a contained box. */
+.cs-band{ background: var(--case-band-bg); padding: 72px 0; }
+.cs-band-inner{ max-width: 1360px; margin: 0 auto; padding: 0 var(--gutter); position: relative; }
+
+/* ---- Contained diagram/screenshot panel (stays within the text column, Figma: w-880) ---- */
+.cs-panel{
+  position: relative;
+  background: var(--case-band-bg);
+  border-radius: 32px;
+  padding: 40px;
+}
+.cs-screenshot{
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  aspect-ratio: 4 / 3.3;
+  border: 1px dashed var(--line-strong);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+.cs-screenshot--wide{ max-width: 1040px; aspect-ratio: 4 / 2.6; }
+.cs-screenshot--tall{ max-width: 900px; aspect-ratio: 4 / 3.9; }
+
+/* Once a real screenshot replaces the "Image to be added" placeholder: swap the dashed
+   affordance for a subtle solid edge, and let the <img>/<video> fill the frame edge-to-edge
+   so coachmark top/left percentages stay anchored to the actual media content. */
+.cs-screenshot--filled{ border: none; }
+.cs-screenshot--filled img,
+.cs-screenshot--filled video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.cs-callout{
+  position: absolute;
+  width: 230px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 14.5px;
+  line-height: 1.4;
+  background: var(--case-blue-bg);
+  color: var(--ink);
+  background-image:
+    linear-gradient(90deg, var(--case-blue-border) 50%, transparent 50%),
+    linear-gradient(90deg, var(--case-blue-border) 50%, transparent 50%),
+    linear-gradient(0deg, var(--case-blue-border) 50%, transparent 50%),
+    linear-gradient(0deg, var(--case-blue-border) 50%, transparent 50%),
+    linear-gradient(var(--case-blue-bg), var(--case-blue-bg));
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y, no-repeat;
+  background-size: 8px 1.5px, 8px 1.5px, 1.5px 8px, 1.5px 8px, 100% 100%;
+  background-position: left top, left bottom, left top, right top, 0 0;
+}
+.cs-callout--purple{
+  background: var(--case-purple-bg);
+  background-image:
+    linear-gradient(90deg, var(--case-purple-border) 50%, transparent 50%),
+    linear-gradient(90deg, var(--case-purple-border) 50%, transparent 50%),
+    linear-gradient(0deg, var(--case-purple-border) 50%, transparent 50%),
+    linear-gradient(0deg, var(--case-purple-border) 50%, transparent 50%),
+    linear-gradient(var(--case-purple-bg), var(--case-purple-bg));
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y, no-repeat;
+  background-size: 8px 1.5px, 8px 1.5px, 1.5px 8px, 1.5px 8px, 100% 100%;
+  background-position: left top, left bottom, left top, right top, 0 0;
+}
+.cs-callout--cyan{
+  background: var(--case-cyan-bg);
+  background-image:
+    linear-gradient(90deg, var(--case-cyan-border) 50%, transparent 50%),
+    linear-gradient(90deg, var(--case-cyan-border) 50%, transparent 50%),
+    linear-gradient(0deg, var(--case-cyan-border) 50%, transparent 50%),
+    linear-gradient(0deg, var(--case-cyan-border) 50%, transparent 50%),
+    linear-gradient(var(--case-cyan-bg), var(--case-cyan-bg));
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y, no-repeat;
+  background-size: 8px 1.5px, 8px 1.5px, 1.5px 8px, 1.5px 8px, 100% 100%;
+  background-position: left top, left bottom, left top, right top, 0 0;
+}
+.cs-callout-line{
+  position: absolute;
+  border-top: 1.5px dashed var(--case-blue-border);
+  height: 0;
+}
+.cs-callout-line--purple{ border-top-color: var(--case-purple-border); }
+.cs-callout-line--cyan{ border-top-color: var(--case-cyan-border); }
+/* Problem callouts: solid tint, no dashed border, solid connector line — visually distinct
+   from the dashed "solution" callouts above so a reader can tell which kind they're looking
+   at without reading the copy first. */
+.cs-callout--problem{
+  background: var(--case-problem-bg);
+  background-image: none;
+}
+.cs-callout-line--problem{ border-top: 1.5px solid var(--case-problem-line); }
+@media (max-width: 900px){
+  .cs-callout{ display: none; }
+  .cs-callout-line{ display: none; }
+}
+
+/* ---- Phone-portrait screenshot variant (mobile app screens, not desktop/spreadsheet shots) ---- */
+.cs-screenshot--phone{ max-width: 300px; aspect-ratio: 9 / 19.5; }
+
+/* ---- Scroll-triggered video frame — sizes to the video's own intrinsic aspect ratio once
+   its metadata loads (no forced ratio here, unlike the old Lottie frame, since a real video
+   already carries that natively). Starts playing once scrolled into view (see script.js),
+   then loops continuously (the `loop` attribute on the <video> itself). ---- */
+.scroll-video{
+  display: block;
+  width: 100%;
+  border-radius: 16px;
+}
+
+/* ---- Before / after screenshot comparison ---- */
+.cs-compare{
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  gap: 48px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.cs-compare-col{ display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.cs-compare-label{
+  font-family: var(--font-sans); font-weight: 700; font-size: 12.5px;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-muted);
+}
+@media (max-width: 640px){ .cs-compare{ grid-template-columns: 1fr; gap: 32px; } }
+
+/* ---- Drag-to-compare slider (overlaid before/after, not side-by-side) ----
+   --pos (0-100%) drives both the clip on .compare-before and the handle/divider position,
+   so JS only ever writes one custom property per frame. .compare-media works for either a
+   placeholder <div> (now) or a real <img>/<video> (drop-in later) — object-fit:cover covers
+   the latter, the flex-center rules only matter for the placeholder text. */
+.compare-slider{
+  --pos: 50%;
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 16 / 10;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  cursor: ew-resize;
+  background: var(--placeholder-bg);
+}
+.compare-media{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--placeholder-bg);
+  font-family: var(--font-sans); font-weight: 500; font-size: 13px; color: var(--ink-muted);
+}
+.compare-before{
+  position: absolute; inset: 0;
+  clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+}
+.compare-divider{
+  position: absolute;
+  top: 0; bottom: 0;
+  left: var(--pos);
+  width: 2px;
+  background: var(--paper);
+  transform: translateX(-50%);
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.1);
+}
+.compare-handle{
+  position: absolute;
+  top: 50%; left: var(--pos);
+  transform: translate(-50%, -50%);
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--video-dark);
+  border: 2px solid var(--paper);
+  color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  cursor: ew-resize;
+  box-shadow: 0 4px 14px rgba(0,0,0,.25);
+  transition: transform 0.15s var(--ease);
+}
+.compare-handle:hover{ transform: translate(-50%, -50%) scale(1.06); }
+.compare-handle svg{ width: 16px; height: 16px; }
+.compare-badge{
+  position: absolute;
+  top: 20px;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-sans); font-weight: 700; font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--paper);
+  background: rgba(20,33,43,.6);
+  padding: 8px 14px;
+  border-radius: 100px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.compare-badge--before{ left: 20px; }
+.compare-badge--after{ right: 20px; }
+.compare-hint{
+  text-align: center;
+  margin-top: 16px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  font-family: var(--font-sans); font-size: 12.5px; color: var(--ink-muted);
+}
+
+/* ---- Coachmark hotspots — numbered markers on a screenshot, tooltip on hover/focus/tap ----
+   .is-open (toggled by script.js on click) covers touch devices, which have no :hover. Position
+   each marker with inline top/left percentages, same convention as .cs-callout. Default tip
+   opens above the marker; add .coachmark--below on markers near the top of their image so the
+   tooltip doesn't clip out of view. */
+.coachmark{
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--video-dark);
+  color: var(--paper);
+  border: 3px solid var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+  z-index: 6;
+  transition: transform 0.2s var(--ease);
+}
+.coachmark::before{
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px solid var(--video-dark);
+  animation: coachmark-pulse 2.4s ease-out infinite;
+}
+@keyframes coachmark-pulse{
+  0%{ transform: scale(0.85); opacity: 0.5; }
+  100%{ transform: scale(1.7); opacity: 0; }
+}
+.coachmark:hover, .coachmark:focus-visible, .coachmark.is-open{
+  transform: translate(-50%, -50%) scale(1.1);
+}
+.coachmark-tip{
+  position: absolute;
+  bottom: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  width: max-content;
+  max-width: 230px;
+  background: var(--video-dark);
+  color: var(--paper);
+  font-family: var(--font-sans); font-weight: 500; font-size: 13px; line-height: 1.5;
+  padding: 14px 16px;
+  border-radius: 12px;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+  box-shadow: 0 12px 32px rgba(0,0,0,.25);
+}
+.coachmark-tip::after{
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-top-color: var(--video-dark);
+}
+.coachmark:hover .coachmark-tip,
+.coachmark:focus-visible .coachmark-tip,
+.coachmark.is-open .coachmark-tip{
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.coachmark--below .coachmark-tip{
+  bottom: auto; top: calc(100% + 14px);
+  transform: translateX(-50%) translateY(-6px);
+}
+.coachmark--below .coachmark-tip::after{
+  top: auto; bottom: 100%;
+  border-top-color: transparent;
+  border-bottom-color: var(--video-dark);
+}
+.coachmark--below:hover .coachmark-tip,
+.coachmark--below:focus-visible .coachmark-tip,
+.coachmark--below.is-open .coachmark-tip{
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Color variants — the marker itself signals severity at a glance (matching the .cs-callout
+   color language it replaces); the tip box stays the same dark, readable style regardless,
+   so the site has one consistent "info box" voice rather than a tooltip per accent color. */
+.coachmark--problem{ background: #E83E41; border-color: var(--paper); }
+.coachmark--problem::before{ border-color: #E83E41; }
+.coachmark--solution{ background: var(--case-cyan-border); }
+.coachmark--solution::before{ border-color: var(--case-cyan-border); }
+.coachmark--purple{ background: var(--case-purple-border); }
+.coachmark--purple::before{ border-color: var(--case-purple-border); }
+
+/* ---- NDA passcode gate ----
+   Client-side only, by necessity — this is a static site with no backend. It's a soft gate
+   against casual browsing, not real access control: the "unlocked" page isn't linked from
+   anywhere but this form, but anyone who finds its URL directly (or reads this file) can open
+   it regardless of the passcode. Good enough for "don't stumble onto NDA'd work while
+   scrolling," not a substitute for real auth. */
+/* Exact spec pulled via get_design_context on node 420:1271 (2026-09-12): dashed border and
+   placeholder both use the site's #E0E0E0 hairline token (var(--line)), title is 24px/1.2
+   (was 22px, unspecified line-height), body runs full ink (not --ink-secondary) at 16px with
+   no line-length cap, the two content groups (intro text, input+hint action) sit 40px apart
+   with 8px/16px gaps inside each — replacing the old flat 24px-everywhere rhythm — and the
+   submit button is ink-on-#E0E0E0 text at 500/14px uppercase (was white text at 600/0.02em
+   tracking). A show/hide toggle on the input is an added affordance, not part of the Figma file. */
+.ndagate{
+  background: rgba(246,246,246,0.72);
+  border: 1px dashed var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.ndagate-intro{ display: flex; flex-direction: column; gap: 8px; }
+.ndagate-title{
+  font-family: var(--font-display); font-weight: 700; font-size: 24px; line-height: 1.2; color: var(--ink);
+}
+.ndagate-body{
+  font-family: var(--font-sans); font-weight: 500; font-size: 16px; color: var(--ink);
+}
+.ndagate-action{ display: flex; flex-direction: column; gap: 16px; }
+.ndagate-row{
+  display: flex; flex-wrap: wrap; align-items: center; gap: 16px;
+}
+.ndagate-input-wrap{ position: relative; flex: 1 1 200px; max-width: 200px; min-width: 0; }
+.ndagate-input{
+  width: 100%;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 40px 8px 16px;
+  font-family: var(--font-sans); font-weight: 500; font-size: 16px; color: var(--ink);
+}
+.ndagate-input::placeholder{ color: var(--line); }
+.ndagate-input.is-error{ border-color: #E83E41; }
+.ndagate-toggle{
+  position: absolute; top: 50%; right: 6px; transform: translateY(-50%);
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; padding: 0;
+  background: none; border: none; color: var(--ink-muted);
+  cursor: pointer;
+}
+.ndagate-toggle:hover{ color: var(--ink); }
+/* The `hidden` attribute doesn't reliably compute to display:none on <svg> in every browser,
+   so the default/active icon swap is done here in CSS + inline style.display in script.js,
+   not via the hidden attribute/property. */
+.ndagate-toggle-icon-hide{ display: none; }
+.ndagate-submit{
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--ink);
+  color: #E0E0E0;
+  border: none;
+  border-radius: 12px;
+  height: 38px;
+  padding: 8px 16px;
+  font-family: var(--font-sans); font-weight: 500; font-size: 14px; text-transform: uppercase;
+  cursor: pointer;
+  transition: transform var(--dur) var(--ease), opacity var(--dur) var(--ease);
+}
+.ndagate-submit:hover{ transform: translateY(-1px); }
+.ndagate-submit:disabled{ opacity: 0.5; cursor: default; transform: none; }
+.ndagate-error{
+  display: none;
+  font-family: var(--font-sans); font-weight: 500; font-size: 13.5px; color: #E83E41;
+}
+.ndagate.is-invalid .ndagate-error{ display: block; }
+.ndagate-hint{
+  font-family: var(--font-sans); font-weight: 500; font-size: 16px; color: var(--ink-muted);
+}
+.ndagate-hint a{ text-decoration: underline; text-underline-offset: 2px; }
+.ndagate-hint a:hover{ color: var(--ink); }
+
+/* ---- Merge diagram: two separate systems converging into a tag cloud of outcomes ----
+   Figma's actual box (h-435) pairs a top row of two system marks with the opportunity tag
+   row below — building only the tag row left the panel visibly shallow relative to its
+   intended weight. */
+.merge-row{
+  display: flex; align-items: center; justify-content: center; gap: 20px;
+}
+.merge-chip{
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 120px;
+  padding: 14px 22px;
+  border-radius: 12px;
+  border: 1.5px dashed var(--line-strong);
+  background: var(--paper);
+  font-family: var(--font-display); font-weight: 700; font-size: 15px;
+  color: var(--ink);
+}
+.merge-arrow{
+  font-family: var(--font-sans); font-size: 18px; color: var(--ink-muted);
+}
+
+/* ---- Tag chip cloud (value-prop / opportunity summaries) ---- */
+.tag-cloud-label{
+  font-family: var(--font-sans); font-weight: 700; font-size: 10px;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-muted);
+  text-align: center;
+  margin-top: 40px;
+}
+.tag-cloud{
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
+  margin-top: 16px;
+}
+.tag-chip{
+  display: inline-flex; align-items: center;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-family: var(--font-sans); font-weight: 500; font-size: 12.5px;
+  color: var(--ink);
+}
+
+/* ---- 3-step process box ---- */
+.step-box{
+  background: var(--case-band-bg);
+  border-radius: 24px;
+  padding: 56px 48px;
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 40px;
+}
+.step-icon{ height: 48px; width: auto; margin-bottom: 28px; display: block; }
+.step-label{
+  font-family: var(--font-sans); font-weight: 700; font-size: 12.5px;
+  letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink-secondary);
+  margin-bottom: 16px;
+}
+.step-title{ font-family: var(--font-display); font-weight: 700; font-size: 19px; color: var(--ink); line-height: 1.35; }
+@media (max-width: 760px){ .step-box{ grid-template-columns: 1fr; } }
+
+/* ---- Outcome stats ---- */
+.outcome-stats{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 32px;
+  margin-top: 40px;
+  max-width: 640px;
+}
+.outcome-stat-label{
+  font-family: var(--font-sans); font-weight: 500; font-size: 12.5px;
+  letter-spacing: 0.03em; text-transform: uppercase; color: var(--ink-muted);
+}
+.outcome-stat-value{
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(36px, 5vw, 48px); color: var(--ink); margin-top: 4px;
+}
+/* Trend triangle (Figma: nodes 420:1163 / 420:947) — one shared up-pointing triangle asset,
+   colored green/red per direction; the "down" variant is the same asset flipped via CSS
+   (scaleY), matching how the Figma file itself composes it rather than a separate shape. */
+.outcome-stat-row{ display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.outcome-stat-row .outcome-stat-value{ margin-top: 0; }
+.outcome-stat-icon{ width: 24px; height: 24px; flex-shrink: 0; }
+.outcome-stat-icon--down{ transform: scaleY(-1); }
+
+/* ---- Stakeholder flow diagram (problem-mapping) ---- */
+.problem-flow{
+  background: var(--case-band-bg);
+  border-radius: 32px;
+  padding: 40px 32px 44px;
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 32px;
+}
+.problem-flow-col{ display: flex; flex-direction: column; gap: 12px; position: relative; }
+.problem-flow-col::after{
+  content: '';
+  position: absolute;
+  top: 34px; right: -17px;
+  width: 16px;
+  border-top: 1.5px dashed var(--line-strong);
+}
+.problem-flow-col:last-child::after{ display: none; }
+.problem-flow-label{
+  font-family: var(--font-sans); font-weight: 700; font-size: 11px;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-muted);
+  margin-bottom: 4px;
+}
+.flow-chip{
+  display: inline-flex; align-items: center;
+  align-self: flex-start;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-family: var(--font-sans); font-weight: 700; font-size: 12.5px;
+  color: var(--ink);
+}
+.flow-chip--blue{ background: var(--case-role-blue); }
+.flow-chip--purple{ background: var(--case-role-purple); }
+.flow-chip--grey{ background: var(--case-role-grey); }
+.flow-chip--mint{ background: var(--case-mint); }
+.flow-chip--coral{ background: var(--case-coral); }
+.flow-note{
+  font-family: var(--font-sans); font-weight: 500; font-size: 12.5px;
+  color: var(--ink-secondary); line-height: 1.4;
+}
+.flow-decision{
+  font-family: var(--font-display); font-weight: 700; font-size: 15px;
+  color: var(--ink); line-height: 1.35; margin-top: 4px;
+}
+.flow-branch{ display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
+.flow-branch-row{ display: flex; align-items: flex-start; gap: 10px; }
+.flow-branch-note{ font-family: var(--font-sans); font-weight: 500; font-size: 12px; color: var(--ink-muted); line-height: 1.4; padding-top: 8px; }
+@media (max-width: 860px){
+  .problem-flow{ grid-template-columns: 1fr; gap: 32px; padding: 32px 24px; }
+  .problem-flow-col::after{ display: none; }
+}
+
+/* ---- "How might we" pull statement ----
+   Exact spec pulled via get_design_context on node 162:1633-162:1694 (2026-09-10): Satoshi
+   Bold, 22px fixed (was a fluid clamp(22px, 2.6vw, 28px)), line-height 1.2 (was 1.4), full
+   container width with no line-length cap (was max-width: 46ch) and no divider above it —
+   the 32px gap above it comes from the parent's flex gap, not a border+padding combo. */
+.cs-hmw{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-top: 32px;
+}
+
+/* ---------- Draggable scatter (kept for future re-use, not rendered on homepage right now) ---------- */
+.drag-field{
+  position: relative;
+  height: 340px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 14px;
+  background: var(--paper-raised);
+  touch-action: none;
+  overflow: hidden;
+}
+.drag-hint{
+  position: absolute;
+  top: 16px; left: 20px;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  color: var(--ink-muted);
+  pointer-events: none;
+}
+.drag-card{
+  position: absolute;
+  width: 168px;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 14px 16px;
+  cursor: grab;
+  user-select: none;
+}
+.drag-card:active{ cursor: grabbing; z-index: 20; }
+.drag-card-label{ font-family: var(--font-sans); font-size: 10.5px; color: var(--ink-muted); text-transform: uppercase; }
+.drag-card-value{ margin-top: 6px; font-size: 14.5px; font-weight: 500; line-height: 1.35; }

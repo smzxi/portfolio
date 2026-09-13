@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CloudLex — Sumaiya Deshpande</title>
+<meta name="description" content="Turning a case repository into a decision-supporting system — CloudLex case study.">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Everything else is shared via .cs-* components in style.css — see the
+     "Case study components" block there. Only this page's unique override lives here. */
+  .contact-block{ padding: 0; }
+</style>
+</head>
+<body>
+
+<header class="cs-hero">
+  <div class="wrap">
+    <div class="cs-topbar">
+      <a class="cs-back" href="index.html#work" aria-label="Back to selected work">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3.33333L3.33333 8L8 12.6667M3.33333 8H12.6667" stroke="#7F8188" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+      <a class="cs-close" href="index.html#work">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M12 4L4 12M4 4L12 12" stroke="#7F8188" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span class="cs-close-label">Close</span>
+      </a>
+    </div>
+
+    <h1 class="cs-title">Turning a case repository into a decision-supporting system</h1>
+
+    <div class="cs-meta">
+      <div>
+        <p class="cs-meta-label">Industry</p>
+        <p class="cs-meta-value">LegalTech</p>
+      </div>
+      <div>
+        <p class="cs-meta-label">Client</p>
+        <p class="cs-meta-value">CloudLex</p>
+      </div>
+      <div>
+        <p class="cs-meta-label">Timeline</p>
+        <p class="cs-meta-value">3 Months</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="divider"></div>
+
+<main class="cs-main">
+  <section class="cs-section cs-section-first">
+    <div class="wrap">
+      <div class="cs-block">
+        <p class="cs-lede">A personal injury law firm is a complex ecosystem where multiple users work together to deliver successful outcomes for clients. Yet the case management platform primarily functioned as a repository of information- not a tool that helped people understand what needed attention, make decisions, or take action.</p>
+      </div>
+
+      <div class="cs-block">
+        <p class="eyebrow cs-eyebrow">Uncovering the problem</p>
+        <p class="cs-lede">A prominent product surface that failed to demonstrate the value it delivered. Low engagement, combined with recurring customer feedback that the dashboard wasn't useful, raised important questions:</p>
+        <ul class="cs-list reveal">
+          <li>Was the information being surfaced actually relevant?</li>
+          <li>Were we solving the right user problems?</li>
+          <li>What should users be able to accomplish from this surface?</li>
+          <li>If the dashboard disappeared, would users actually miss it?</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="cs-fullbleed">
+    <img class="cs-diagram-img reveal" src="images/cloudlex/old-matter-dashboard.png" alt="72% of users landed on the old dashboard, but only 6% interacted with it. Annotated: shows volume, not business performance; enables navigation, not prioritization; displays workload, not workload health; tracks activity, not productivity.">
+  </div>
+
+  <section class="cs-section">
+    <div class="wrap">
+      <div class="cs-block">
+        <p class="eyebrow cs-eyebrow">Research</p>
+        <p class="cs-lede">Through stakeholder interviews, alongside a review of existing workflows and operational processes, we uncovered two distinct user groups with fundamentally different needs - revealing complementary opportunities for the platform to better support how they work.</p>
+
+        <img class="cs-diagram-img reveal" src="images/cloudlex/user-groups.png" alt="Two user personas. Attorneys and Paralegals ask: What work is lined up for today? Since my day revolves around active matters, I need clarity, not another place to search. Managing Partner asks: How is my firm performing? I need to know if our cases are progressing efficiently and which practice areas are performing well.">
+      </div>
+
+      <div class="cs-block">
+        <p class="eyebrow cs-eyebrow">Design principles</p>
+        <div class="principles-grid reveal">
+          <div>
+            <p class="principle-title">Prioritise information</p>
+            <p class="principle-desc">Surface the most relevant information based on the user's role</p>
+          </div>
+          <div>
+            <p class="principle-title">Support action</p>
+            <p class="principle-desc">Allow users to immediately take the next appropriate step.</p>
+          </div>
+          <div>
+            <p class="principle-title">Reduce cognitive load</p>
+            <p class="principle-desc">Organize information clearly and minimize context-switching</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="wrap">
+      <p class="eyebrow cs-eyebrow">Supporting operational teams</p>
+      <p class="cs-lede">The Matter Workbench became the central workspace for attorneys and paralegals managing active matters. It consolidated case activity, tasks, deadlines, and priorities into a single operational view, enabling users to quickly understand what required attention and efficiently manage high-volume caseloads.</p>
+    </div>
+  </section>
+
+  <div class="cs-fullbleed">
+    <img class="cs-diagram-img reveal" src="images/cloudlex/matter-workbench-overview.png" alt="Matter Workbench overview showing matter summary, upcoming events, and tasks due, annotated: Track case progress at a glance; Quick jumps to matters that you've been working on; Identify time-sensitive matters; Gateway to regular administrative tasks.">
+  </div>
+
+  <div class="cs-fullbleed">
+    <img class="cs-diagram-img reveal" src="images/cloudlex/off-track-matters.png" alt="Off-Track Matters table highlighting cases with missed court dates and overdue tasks, annotated: &ldquo;Off Track Matters&rdquo; widget surfaced cases requiring immediate attention, so attorneys could quickly identify where intervention was needed.">
+  </div>
+
+  <section class="cs-section">
+    <div class="wrap">
+      <p class="eyebrow cs-eyebrow">Supporting firm leadership</p>
+      <p class="cs-lede">The Insights Dashboard gave managing partners a comprehensive view of firm performance. Instead of relying on manually generated reports or disconnected spreadsheets, leaders could monitor operational and business metrics in real time to understand performance, identify trends, and make informed strategic decisions.</p>
+
+      <img class="cs-diagram-img reveal" src="images/cloudlex/supporting-firm-leadership.png" alt="Three-step process. 1. Auditing the data: What information is the system already capturing? 2. Identifying what matters: What does a Managing Partner need to know? 3. Surfacing the insight: Turn multiple signals into an actionable starting point.">
+    </div>
+  </section>
+
+  <div class="cs-fullbleed">
+    <img class="cs-diagram-img reveal" src="images/cloudlex/insights-dashboard.png" alt="Insights Dashboard showing lead-to-matter conversion, matter age, and matter closure trend, annotated: Surfacing widgets that actually made sense in a managing partner's workflow; Translating complex data into easy to understand &ldquo;insights&rdquo; to help drive action.">
+  </div>
+
+  <section class="cs-section">
+    <div class="wrap">
+      <p class="eyebrow cs-eyebrow">Outcome</p>
+      <p class="cs-lede">Together, the Matter Workbench and Insights Dashboard transformed the platform into a role-aware operational command center. Despite serving different user groups, both experiences were connected by a common goal: reducing manual effort, improving visibility, and enabling better decisions across the firm.</p>
+
+      <div class="outcome-stats reveal">
+        <div>
+          <p class="outcome-stat-label">Increased adoption by</p>
+          <div class="outcome-stat-row">
+            <svg class="outcome-stat-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12.5 7.75L4.5 15.75H20.5L12.5 7.75Z" fill="#34C759"/></svg>
+            <p class="outcome-stat-value">85%</p>
+          </div>
+        </div>
+        <div>
+          <p class="outcome-stat-label">Reduction in reporting time</p>
+          <div class="outcome-stat-row">
+            <svg class="outcome-stat-icon outcome-stat-icon--down" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12.5 7.75L4.5 15.75H20.5L12.5 7.75Z" fill="#FF383C"/></svg>
+            <p class="outcome-stat-value">15%</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact-block">
+    <div class="wrap">
+      <p class="contact-heading reveal">Reach out for full-time jobs, freelance projects, design advice or just to say hi!</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <ul class="footer-links">
+      <li><a href="mailto:sumaiyadeshpande@gmail.com">Email</a></li>
+      <li>·</li>
+      <li><a href="https://www.linkedin.com/in/sumaiyadeshpande" target="_blank" rel="noopener">Socials</a></li>
+      <li>·</li>
+      <li><a href="resume.pdf" target="_blank" rel="noopener">Resume</a></li>
+    </ul>
+    <p class="footer-note">Designed by me, built using Claude</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

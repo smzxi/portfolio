@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "portfolio-static",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["/Users/copods/Desktop/Sumaiya Deshpande - Portfolio Files/.claude/serve.py"],
+      "port": 4173
+    }
+  ]
+}

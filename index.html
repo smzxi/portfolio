@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sumaiya Deshpande — Product Designer</title>
+<meta name="description" content="Product designer with 4+ years across WealthTech, LegalTech, Healthcare and Generative AI. Selected work and beliefs.">
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  /* ---- Hero ---- */
+  .hero-field{
+    position: relative;
+    overflow: hidden;
+  }
+  #dotfield{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+  }
+  .hero-field .site-nav,
+  .hero{ position: relative; }
+
+  /* 180px bottom padding gives the dot dissolve room to finish in empty space
+     above "Selected work" — with the divider gone, the fade IS the section break. */
+  .hero{ padding: 40px 0 180px; }
+
+  .hero-headline{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(34px, 5.2vw, 60px);
+    line-height: 1.14;
+    letter-spacing: -0.015em;
+    animation: hero-in 0.8s var(--ease) 0.55s both;
+  }
+  @media (max-width: 640px){
+    .hero-headline br.force-break{ display: none; }
+  }
+  .hero-headline .accent-line{ color: var(--accent); }
+
+  .hero-status{
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--ink-secondary);
+    animation: hero-in 0.8s var(--ease) 0.72s both;
+  }
+  .hero-status .dot{
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--status-online);
+    flex: none;
+    animation: hero-status-pulse 3.2s ease-out 1.6s infinite;
+  }
+
+  @keyframes hero-in{
+    from{ opacity: 0; transform: translateY(10px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+  @keyframes hero-status-pulse{
+    0%{ box-shadow: 0 0 0 0 rgba(58,167,109,.5); }
+    70%{ box-shadow: 0 0 0 8px rgba(58,167,109,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(58,167,109,0); }
+  }
+
+  /* ---- Selected work ---- */
+  .section{ padding: var(--sp-7) 0; }
+  .section-first{ padding-top: 0; }
+  /* With the divider gone, .hero's own 180px bottom padding is the section break —
+     24px here keeps the dot-field dissolve reading as continuous instead of a big gap. */
+  #work.section{ padding-top: 24px; }
+  /* Exact spec pulled via get_design_context on node 420:1208 (2026-09-12): the contact
+     heading and the footer row below it are one 16px-gapped unit — this section's own
+     generic .section bottom padding (108px) was stacking with .site-footer's top padding
+     instead. */
+  .contact-block.section{ padding-bottom: 0; }
+  .section-label{ margin-bottom: var(--sp-4); }
+
+  .work-list{ display: flex; flex-direction: column; gap: 104px; }
+  .work-card-media{
+    position: relative;
+    aspect-ratio: 880 / 435;
+    width: 100%;
+    border-radius: 32px;
+    background: var(--placeholder-bg);
+    overflow: hidden;
+    transition: transform 0.5s var(--ease);
+  }
+  a.work-card:hover .work-card-media{ transform: scale(1.01); }
+  .work-card-media > svg, .work-card-media > video{ width: 100%; height: 100%; transition: filter 0.4s var(--ease); }
+  .work-card-media > video{ display: block; border-radius: 32px; }
+
+  /* NDA-protected work: the cover art blurs on hover with a small badge staying sharp over it —
+     reads like one element of the mockup itself got redacted, not a generic overlay. The > svg
+     selectors (here and above) matter: without them, this also blurs the lock icon nested
+     inside .work-card-nda-badge, since it's an svg too, just not the cover art. */
+  .work-card--nda:hover .work-card-media > svg, .work-card--nda:hover .work-card-media > video{ filter: blur(3px); }
+  .work-card-nda-badge{
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) translateY(6px);
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    padding: 16px 22px;
+    background: var(--paper);
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+  .work-card-nda-badge svg{ width: 18px; height: 18px; color: var(--ink); flex: none; }
+  .work-card-nda-badge span{
+    font-family: var(--font-sans); font-weight: 700; font-size: 11.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink);
+  }
+  .work-card--nda:hover .work-card-nda-badge{
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0);
+  }
+  .work-card-info{ margin-top: 28px; }
+  .work-name{
+    display: block;
+    font-size: 19px;
+    font-weight: 700;
+    font-family: var(--font-display);
+    color: var(--ink);
+  }
+  .work-outcome{
+    font-size: 15px;
+    color: var(--ink-secondary);
+    margin-top: 6px;
+  }
+  .work-card.is-soon{ opacity: 0.55; pointer-events: none; }
+
+  /* ---- About ----
+     Node 360:3754 (2026-09-06) confirmed this eyebrow at 14px/Medium/ink-50% — now the shared
+     .eyebrow base rule (see style.css, node 420:1016) matches this exactly, so no override
+     is needed here any more. */
+  /* Exact spec pulled via get_design_context on node 360:3758 / 420:413 (2026-09-06,
+     2026-09-12): Satoshi Medium, 18px, line-height 1.2, full container width (size-full,
+     no line-length cap) — was shipped at 24px/1.5 with a 72ch cap, both bigger/looser and
+     narrower than spec. */
+  .about-intro p{ color: var(--ink); font-size: 18px; font-weight: 500; line-height: 1.2; }
+  .about-intro p + p{ margin-top: 1.2em; }
+
+  /* ---- About board (moodboard panel) ----
+     Exact spec pulled via get_design_context on node 420:408 (2026-09-12): an 880x500
+     dashed-bordered panel (0.5px #E0E0E0, 32px radius), with photos pinned at exact
+     rotations/positions, a "MY STACK" icon pill, and a click-to-shuffle photo stack.
+     880/500 is a proportions reference, not a hard cap — same pattern as .work-card-media's
+     aspect-ratio:880/435 with width:100%, so this panel fills the full content column exactly
+     like the work cards above it, rather than sitting narrower than them past 880px viewports.
+     Children are laid out on a fixed 880x500 canvas (matching Figma's own px values exactly)
+     and the whole canvas is scaled up/down together via container-query units so it stays
+     pixel-faithful in proportion at any rendered width. The interior grid uses the same subtle
+     dot pattern as the hero's dot field (small ink dots at low opacity, 20px spacing) rather
+     than Figma's literal dashed-line grid — a deliberate deviation, per user request, to feel
+     less busy than a continuous dashed grid. */
+  .about-board-wrap{
+    position: relative;
+    margin-top: var(--sp-5);
+    width: 100%;
+    aspect-ratio: 880 / 500;
+    border-radius: 32px;
+    border: 0.5px dashed var(--line);
+    background-color: var(--paper);
+    background-image: url('images/about/dot-tile.svg');
+    background-repeat: repeat;
+    overflow: hidden;
+  }
+  .about-board-title{
+    position: absolute;
+    left: 50%; top: 21.75px;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--ink);
+    opacity: .5;
+    text-align: center;
+    white-space: nowrap;
+  }
+  /* Scaled via JS (script.js), not CSS container-query units — cqw inside a transform's
+     calc() silently no-ops in some engines, which left the canvas stuck at its native 880px
+     width (flush-left in a wider wrap) instead of filling it, throwing every "centered"
+     element off by half the leftover gap. A resize-driven inline transform is unambiguous. */
+  .about-board{
+    position: absolute;
+    top: 0; left: 0;
+    width: 880px;
+    height: 500px;
+    transform-origin: top left;
+  }
+  .about-pin{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  /* These pin photos are pre-styled "sticker" assets (own rounded card + shadow already
+     baked in) — no CSS border/radius/crop, shown at their native aspect ratio. Scaling on
+     hover works without fighting the pin's own rotate() because the photo itself carries no
+     base transform — it just grows within its already-tilted parent's coordinate space. */
+  .about-pin-photo{ flex-shrink: 0; transition: transform 0.25s var(--ease); }
+  .about-pin-photo img{ display: block; width: 100%; height: auto; }
+  .about-pin:hover .about-pin-photo{ transform: scale(1.08); }
+  .about-pin-label{
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--ink);
+    opacity: .5;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .about-pin--reading{ left: 67.75px; top: 48.75px; width: 171.133px; height: 216.56px; transform: rotate(-15.84deg); justify-content: flex-end; }
+  .about-pin--reading .about-pin-photo{ width: 125px; }
+
+  .about-pin--type{ left: 661.75px; top: -1.25px; width: 180.556px; height: 218.938px; transform: rotate(15.39deg); justify-content: flex-end; }
+  .about-pin--type .about-pin-photo{ width: 126px; }
+
+  .about-pin--music{ left: 54.75px; top: 320.75px; }
+  .about-pin--music .about-pin-photo{ width: 136px; }
+
+  .about-pin--tennis{ left: 688.75px; top: 299.75px; width: 101.675px; height: 119.623px; transform: rotate(16.29deg); gap: 8px; justify-content: flex-end; }
+  .about-pin--tennis .about-pin-photo{ width: 85px; }
+  .about-pin--tennis .about-pin-label{ white-space: nowrap; }
+
+  /* Exact spec pulled via get_design_context on node 430:43277 (2026-09-12): all 3 photos fan
+     out simultaneously (not a 2-card overlap) at fixed rotations/offsets, with the "PHOTO X/3"
+     label reflecting whichever photo currently sits in the front slot. Centered via
+     left:50%/transform (not Figma's raw px), matching .about-stack-pill below it. No CSS
+     border/radius/crop on the cards — same "already-styled sticker" treatment as the hobby
+     pin photos, per direct instruction, overriding Figma's own border-and-crop spec (which
+     was authored around a different, unstyled source asset).
+     Figma positions the OUTER (larger, unrotated) bounding box at each left/top, then centers
+     the smaller true-size card inside it before rotating — collapsing that into "position the
+     card itself at left/top" (what shipped first) visually exaggerates the fan, since a wider
+     box rotated the same number of degrees swings its corners further. This reinstates that
+     nested outer-box + centered-inner-card structure with Figma's exact numbers, matching the
+     established pattern for every other rotated element on this site. */
+  .about-photo-stack{
+    position: absolute;
+    left: 50%; top: 53px;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    background: none; border: none; padding: 0; margin: 0;
+    font: inherit; cursor: pointer;
+  }
+  .about-photo-stack-cards{ position: relative; width: 302px; height: 292px; }
+  /* Each card keeps a fixed photo identity (data-photo, set once in HTML) and simply carries a
+     different slot class over time — shuffling re-assigns which element has --front/--mid/--back
+     rather than swapping the img src underneath a fixed set of slots. Because left/top/width/
+     height/rotate are all real transitions here, that class swap makes the actual card glide
+     to its new slot (and the mover-to-front one naturally passes over the others, the
+     mover-to-back one naturally passes under, since z-index flips the instant the class
+     changes) — a real physical reorder instead of an in-place wobble over a src swap, which
+     also sidesteps a specificity bug the wobble had: :hover (3 class-selectors) beat the old
+     .is-shuffling rule (2 class-selectors) while the cursor stayed over the button, so the
+     shuffle pose only appeared once the pointer moved away — a delayed "bounce" that had
+     nothing to do with the actual click. Hover here is just a plain scale, so it can't collide. */
+  .about-photo-stack-card{
+    position: absolute;
+    display: flex; align-items: center; justify-content: center;
+    transition: left 0.5s var(--ease), top 0.5s var(--ease), width 0.5s var(--ease), height 0.5s var(--ease);
+  }
+  .about-photo-stack-card img{
+    display: block;
+    transform: rotate(var(--rotate));
+    transition: transform 0.5s var(--ease);
+  }
+  .about-photo-stack-card--front{ left: 0px; top: 7.21px; width: 220.935px; height: 275.937px; z-index: 3; }
+  .about-photo-stack-card--front img{ width: 180.645px; --rotate: -4.77deg; }
+  .about-photo-stack-card--mid{ left: 41px; top: 13.99px; width: 203.043px; height: 262.547px; z-index: 2; }
+  .about-photo-stack-card--mid img{ width: 180.645px; --rotate: 0.67deg; }
+  .about-photo-stack-card--back{ left: 63.09px; top: 0; width: 239.222px; height: 291.458px; z-index: 1; }
+  .about-photo-stack-card--back img{ width: 182.609px; --rotate: 9.13deg; }
+  .about-photo-stack:hover .about-photo-stack-card img{ transform: rotate(var(--rotate)) scale(1.03); }
+
+  .about-stack-pill{
+    position: absolute;
+    left: 50%; top: 393.75px;
+    transform: translateX(-50%);
+    display: flex; align-items: center; gap: 32px;
+    background: var(--paper);
+    border: 10px solid rgba(224,224,224,.5);
+    border-radius: 32px;
+    padding: 12px 16px;
+  }
+  .about-stack-icons{ display: flex; align-items: center; gap: 16px; }
+  .about-stack-icon-wrap{ width: 38px; height: 38px; flex-shrink: 0; display: block; transition: transform 0.2s var(--ease); }
+  .about-stack-icon-wrap img{ display: block; width: 100%; height: 100%; }
+  .about-stack-icon-wrap:hover{ transform: scale(1.12); }
+
+  @media (max-width: 640px){
+    .about-board-wrap{ aspect-ratio: 3 / 4; }
+    .about-board{ top: 50%; margin-top: -250px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero-field">
+<canvas id="dotfield" aria-hidden="true"></canvas>
+
+<nav class="site-nav">
+  <div class="wrap site-nav-inner">
+  <a class="site-logo" href="index.html" aria-label="Sumaiya Deshpande — Home">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="12" fill="#363839"></rect><path d="M21.8545 8H19.7681C19.5183 8 19.4243 8.32693 19.6359 8.45962C19.8637 8.60244 19.7345 8.95493 19.4684 8.91672L14.41 8.1906C10.4739 7.70347 8.83404 13.0648 12.3692 14.8629L18.0747 17.7649C19.593 18.5371 20.1498 20.4269 19.2929 21.899L18.9988 22.4042C18.6499 23.0036 18.0087 23.3723 17.3152 23.3723C15.3957 23.3723 14.6331 20.8892 16.2218 19.8119L17.4304 18.9923C17.729 18.7898 17.6519 18.3302 17.3036 18.2362L13.5926 17.2346C11.405 16.6442 9.25351 18.292 9.25351 20.5579C9.25351 22.4589 10.7946 24 12.6957 24H19.5456C20.9242 24 22.1479 23.1172 22.5827 21.8089C23.0832 20.3029 22.4045 18.6576 20.9878 17.9425L14.129 14.4804L12.8562 13.7491C11.9553 13.2313 11.5022 12.1826 11.7429 11.1717C11.9724 10.2078 12.7827 9.49208 13.7675 9.38333L13.8785 9.37107C15.2969 9.21444 16.5592 10.2727 16.6526 11.6966L16.8398 14.5528C16.8543 14.7745 17.039 14.9488 17.2605 14.9316C19.8708 14.7283 21.9156 12.5275 21.8797 9.86479L21.8545 8Z" fill="white"></path></svg>
+  </a>
+  <div class="nav-pill">
+    <a href="index.html#work" aria-label="Work">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8.00006 7.99792H8.00673M10.6667 3.99792V2.66458C10.6667 2.31096 10.5263 1.97182 10.2762 1.72177C10.0262 1.47173 9.68702 1.33125 9.3334 1.33125H6.66673C6.31311 1.33125 5.97397 1.47173 5.72392 1.72177C5.47387 1.97182 5.3334 2.31096 5.3334 2.66458V3.99792M14.6667 8.66458C12.6886 9.97057 10.3704 10.6668 8.00006 10.6668C5.6297 10.6668 3.31154 9.97057 1.3334 8.66458M2.66673 3.99792H13.3334C14.0698 3.99792 14.6667 4.59487 14.6667 5.33125V11.9979C14.6667 12.7343 14.0698 13.3313 13.3334 13.3313H2.66673C1.93035 13.3313 1.3334 12.7343 1.3334 11.9979V5.33125C1.3334 4.59487 1.93035 3.99792 2.66673 3.99792Z" stroke="#7F8188" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </a>
+    <a href="index.html#about" aria-label="About">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8.00003 8.66667C9.84098 8.66667 11.3334 7.17428 11.3334 5.33333C11.3334 3.49238 9.84098 2 8.00003 2C6.15908 2 4.6667 3.49238 4.6667 5.33333C4.6667 7.17428 6.15908 8.66667 8.00003 8.66667ZM8.00003 8.66667C9.41452 8.66667 10.7711 9.22857 11.7713 10.2288C12.7715 11.229 13.3334 12.5855 13.3334 14M8.00003 8.66667C6.58554 8.66667 5.22899 9.22857 4.2288 10.2288C3.2286 11.229 2.6667 12.5855 2.6667 14" stroke="#7F8188" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </a>
+    <a href="beliefs.html" aria-label="Beliefs">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M7.99985 11.998V3.33134M7.99985 11.998C8.00024 12.3625 8.07535 12.7231 8.22054 13.0574C8.36573 13.3917 8.57793 13.6927 8.84401 13.9418C9.1101 14.191 9.42443 14.3829 9.76759 14.5057C10.1108 14.6286 10.4755 14.6798 10.8392 14.6562C11.2029 14.6326 11.558 14.5347 11.8824 14.3685C12.2068 14.2023 12.4937 13.9714 12.7253 13.69C12.957 13.4086 13.1285 13.0826 13.2293 12.7324C13.33 12.3821 13.3579 12.0148 13.3112 11.6533M7.99985 11.998C7.99946 12.3625 7.92435 12.7231 7.77916 13.0574C7.63397 13.3917 7.42178 13.6927 7.15569 13.9418C6.8896 14.191 6.57527 14.3829 6.23211 14.5057C5.88895 14.6286 5.52423 14.6798 5.1605 14.6562C4.79677 14.6326 4.44174 14.5347 4.11733 14.3685C3.79292 14.2023 3.50603 13.9714 3.27437 13.69C3.04272 13.4086 2.87121 13.0826 2.77044 12.7324C2.66968 12.3821 2.6418 12.0148 2.68852 11.6533M7.99985 3.33134C7.99984 3.02455 8.0704 2.72188 8.20608 2.44673C8.34176 2.17158 8.53891 1.93133 8.7823 1.74457C9.02568 1.55781 9.30877 1.42954 9.60965 1.36968C9.91054 1.30983 10.2212 1.32 10.5175 1.3994C10.8138 1.4788 11.0879 1.62531 11.3186 1.82759C11.5492 2.02987 11.7302 2.2825 11.8476 2.56593C11.965 2.84937 12.0156 3.15601 11.9956 3.46213C11.9755 3.76826 11.8853 4.06566 11.7319 4.33134M7.99985 3.33134C7.99986 3.02455 7.9293 2.72188 7.79362 2.44673C7.65795 2.17158 7.46079 1.93133 7.21741 1.74457C6.97402 1.55781 6.69094 1.42954 6.39005 1.36968C6.08916 1.30983 5.77854 1.32 5.48221 1.3994C5.18588 1.4788 4.91179 1.62531 4.68114 1.82759C4.45049 2.02987 4.26946 2.2825 4.15207 2.56593C4.03468 2.84937 3.98406 3.15601 4.00414 3.46213C4.02422 3.76826 4.11445 4.06566 4.26785 4.33134M9.99985 8.66467C9.42305 8.49606 8.91641 8.14509 8.55585 7.66434C8.19529 7.18359 8.00021 6.59894 7.99985 5.998C7.99949 6.59894 7.80442 7.18359 7.44385 7.66434C7.08329 8.14509 6.57665 8.49606 5.99985 8.66467M11.9979 3.41467C12.3897 3.51543 12.7535 3.70404 13.0617 3.96621C13.3699 4.22839 13.6144 4.55725 13.7766 4.9279C13.9389 5.29855 14.0147 5.70127 13.9983 6.10555C13.9818 6.50983 13.8736 6.90507 13.6819 7.26134M11.9999 11.998C12.5869 11.998 13.1574 11.8043 13.6231 11.4469C14.0888 11.0896 14.4236 10.5885 14.5755 10.0215C14.7275 9.45453 14.6881 8.85324 14.4634 8.31092C14.2388 7.76859 13.8415 7.31553 13.3332 7.02201M3.99985 11.998C3.41285 11.998 2.84226 11.8043 2.37656 11.4469C1.91087 11.0896 1.5761 10.5885 1.42417 10.0215C1.27224 9.45453 1.31164 8.85324 1.53626 8.31092C1.76088 7.76859 2.15817 7.31553 2.66652 7.02201M4.00185 3.41467C3.60999 3.51543 3.24619 3.70404 2.93801 3.96621C2.62982 4.22839 2.38534 4.55725 2.22308 4.9279C2.06082 5.29855 1.98502 5.70127 2.00144 6.10555C2.01786 6.50983 2.12606 6.90507 2.31785 7.26134" stroke="#7F8188" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </a>
+    <a href="resume.pdf" target="_blank" rel="noopener" aria-label="Resume">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M9.33327 1.33125H3.99994C3.64631 1.33125 3.30717 1.47173 3.05713 1.72178C2.80708 1.97182 2.6666 2.31096 2.6666 2.66459V13.3313C2.6666 13.6849 2.80708 14.024 3.05713 14.2741C3.30717 14.5241 3.64631 14.6646 3.99994 14.6646H11.9999C12.3536 14.6646 12.6927 14.5241 12.9427 14.2741C13.1928 14.024 13.3333 13.6849 13.3333 13.3313V5.33125M9.33327 1.33125C9.5443 1.33091 9.75332 1.37232 9.94829 1.4531C10.1433 1.53388 10.3203 1.65242 10.4693 1.80192L12.8613 4.19392C13.0112 4.34292 13.13 4.52015 13.2111 4.71536C13.2921 4.91057 13.3336 5.1199 13.3333 5.33125M9.33327 1.33125V4.66459C9.33327 4.8414 9.40351 5.01097 9.52853 5.13599C9.65356 5.26101 9.82312 5.33125 9.99994 5.33125L13.3333 5.33125M6.6666 5.99792H5.33327M10.6666 8.66459H5.33327M10.6666 11.3313H5.33327" stroke="#7F8188" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </a>
+  </div>
+  </div>
+</nav>
+
+<header class="hero" id="hero">
+  <div class="wrap">
+    <h1 class="hero-headline">I design clarity into systems <br class="force-break">where getting it wrong <br class="force-break"><span class="accent-line">actually costs something.</span></h1>
+    <div class="hero-status">
+      <span class="dot" aria-hidden="true"></span>
+      <span>Based in Pune &#183; Currently @COPODS</span>
+    </div>
+  </div>
+</header>
+</div>
+
+<main>
+  <section class="section" id="work">
+    <div class="wrap">
+      <p class="eyebrow section-label">Selected work</p>
+
+      <div class="work-list">
+        <a href="selfwealth.html" class="work-card work-card--nda reveal">
+          <div class="work-card-media">
+            <video src="videos/selfwealth-intro-animation.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+            <span class="work-card-nda-badge" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" stroke-width="2"/></svg>
+              <span>Under NDA</span>
+            </span>
+          </div>
+          <div class="work-card-info">
+            <span class="work-name">Evolving critical financial flows without disrupting users - maintaining churn at 4.2%</span>
+            <p class="work-outcome">Selfwealth by Syfe &middot; 2025-26</p>
+          </div>
+        </a>
+
+        <a href="work-cloudlex.html" class="work-card reveal">
+          <div class="work-card-media">
+            <video src="videos/cloudlex-intro-splash.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+          </div>
+          <div class="work-card-info">
+            <span class="work-name">Making a case management platform role-aware and increasing adoption by 80%</span>
+            <p class="work-outcome">CloudLex &middot; 2024</p>
+          </div>
+        </a>
+
+        <a href="recordxtract.html" class="work-card reveal">
+          <div class="work-card-media">
+            <video src="videos/recordxtract-intro-splash.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+          </div>
+          <div class="work-card-info">
+            <span class="work-name">0 → 1 design of a retrieval platform that reduced turnaround times by 40%.</span>
+            <p class="work-outcome">RecordXtract &middot; 2023</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section" id="about">
+    <div class="wrap">
+      <p class="eyebrow section-label">About</p>
+      <div class="about-intro reveal">
+        <p>I&rsquo;m a Product Designer with 4+ years of experience building B2B and B2C products with teams at big tech companies, unicorns, and stealth startups worldwide.</p>
+        <p>Currently, I&rsquo;m building Selfwealth — empowering more than 130K investors across Australia to trade with greater confidence and ease.</p>
+        <p>I care deeply about my craft — doing what it takes, and obsessing over the details until it makes an experience feel just right.</p>
+      </div>
+      <div class="about-board-wrap reveal">
+        <div class="about-board">
+          <p class="about-board-title">BEYOND THE WORK :)</p>
+
+          <div class="about-pin about-pin--reading">
+            <div class="about-pin-photo"><img src="images/about/reading-book.png" alt="Book cover: There Are Rivers in the Sky by Elif Shafak" draggable="false"></div>
+            <p class="about-pin-label">READING</p>
+          </div>
+
+          <div class="about-pin about-pin--type">
+            <div class="about-pin-photo"><img src="images/about/type-experiments.png" alt="A type-experiment mark" draggable="false"></div>
+            <p class="about-pin-label">TYPE EXPERIMENTS</p>
+          </div>
+
+          <div class="about-pin about-pin--music">
+            <div class="about-pin-photo"><img src="images/about/music-vinyl.png" alt="A record player" draggable="false"></div>
+            <p class="about-pin-label">MUSIC</p>
+          </div>
+
+          <div class="about-pin about-pin--tennis">
+            <div class="about-pin-photo"><img src="images/about/tennis-photo.png" alt="A tennis ball" draggable="false"></div>
+            <p class="about-pin-label">TENNIS :)</p>
+          </div>
+
+          <button type="button" class="about-photo-stack" id="aboutPhotoShuffle">
+            <span class="about-photo-stack-cards">
+              <span class="about-photo-stack-card about-photo-stack-card--back" data-photo="3"><img src="images/about/shuffle-photo-3.png" alt="" draggable="false"></span>
+              <span class="about-photo-stack-card about-photo-stack-card--mid" data-photo="2"><img src="images/about/shuffle-photo-2.png" alt="" draggable="false"></span>
+              <span class="about-photo-stack-card about-photo-stack-card--front" data-photo="1"><img src="images/about/shuffle-photo-1.png" alt="A personal photo" draggable="false"></span>
+            </span>
+            <span class="about-pin-label">CLICK TO SHUFFLE</span>
+          </button>
+
+          <div class="about-stack-pill">
+            <p class="about-pin-label">MY STACK</p>
+            <div class="about-stack-icons">
+              <span class="about-stack-icon-wrap"><img src="images/about/stack-figma.png" alt="Figma" draggable="false"></span>
+              <span class="about-stack-icon-wrap"><img src="images/about/stack-framer.png" alt="Framer" draggable="false"></span>
+              <span class="about-stack-icon-wrap"><img src="images/about/stack-chatgpt.png" alt="ChatGPT" draggable="false"></span>
+              <span class="about-stack-icon-wrap"><img src="images/about/stack-cursor.png" alt="Cursor" draggable="false"></span>
+              <span class="about-stack-icon-wrap"><img src="images/about/stack-claude.png" alt="Claude" draggable="false"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact-block">
+    <div class="wrap">
+      <p class="contact-heading reveal">Reach out for full-time jobs, freelance projects, design advice or just to say hi!</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <ul class="footer-links">
+      <li><a href="mailto:sumaiyadeshpande@gmail.com">Email</a></li>
+      <li>·</li>
+      <li><a href="https://www.linkedin.com/in/sumaiyadeshpande" target="_blank" rel="noopener">Socials</a></li>
+      <li>·</li>
+      <li><a href="resume.pdf" target="_blank" rel="noopener">Resume</a></li>
+    </ul>
+    <p class="footer-note">Designed by me, built using Claude</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

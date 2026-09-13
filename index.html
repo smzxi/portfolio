@@ -305,12 +305,60 @@
   .about-stack-icon-wrap img{ display: block; width: 100%; height: 100%; }
   .about-stack-icon-wrap:hover{ transform: scale(1.12); }
 
-  /* No mobile override here any more: the board is scaled via JS (script.js, based on
+  /* No mobile override up to this point: the board is scaled via JS (script.js, based on
      wrap.clientWidth/880) rather than a CSS-only trick, so keeping .about-board-wrap at the
-     same 880:500 aspect-ratio on every screen size makes the scaled canvas fill it exactly at
-     any width — the old 3:4 mobile override + a hardcoded -250px margin-top were left over
-     from the pre-JS-scale version and, once the board is always scaled, made it float ~130px
-     too high inside a wrap now taller than its content needs, leaving a large empty gap below. */
+     same 880:500 aspect-ratio fills it exactly at any width above 640px (the old 3:4 mobile
+     override + a hardcoded -250px margin-top were left over from a pre-JS-scale version and,
+     once the board is always scaled, made it float ~130px too high in a wrap now taller than
+     its content needs). Below 640px, per explicit design feedback, the landscape 880x500
+     canvas got too cramped to read (tiny pins/photos on a narrow phone) — this switches the
+     whole board to a real vertical layout instead of just scaling the same canvas down:
+     everything drops out of the fixed-canvas/absolute-position system into normal document
+     flow (script.js's updateScale() bails out below 640px so it doesn't fight this with an
+     inline transform), pins keep their identity but lose their desktop tilt/overlap since
+     that only reads well spread across a wide canvas, and the shuffle-stack + stack-pill
+     widgets are left at their native pixel sizes (they're self-contained, not tied to the
+     880 canvas) with just enough side padding on the wrap to fit the widest one (302px). */
+  @media (max-width: 640px){
+    .about-board-wrap{
+      aspect-ratio: auto;
+      padding: 32px 10px 40px;
+    }
+    .about-board{
+      position: static;
+      width: 100%;
+      height: auto;
+      transform: none !important;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+    .about-board-title{ position: static; transform: none; }
+    .about-pin--reading, .about-pin--type, .about-pin--music, .about-pin--tennis{
+      position: static;
+      transform: none;
+      width: auto; height: auto;
+      justify-content: flex-start;
+    }
+    .about-pin--reading .about-pin-photo{ width: 140px; }
+    .about-pin--type .about-pin-photo{ width: 140px; }
+    .about-pin--music .about-pin-photo{ width: 150px; }
+    .about-pin--tennis .about-pin-photo{ width: 110px; }
+    /* .about-photo-stack and .about-stack-pill are centered on desktop via left:50% +
+       transform:translateX(-50%) — translateX keeps applying even once position:static makes
+       left a no-op, so without cancelling it here it doubles up against the flex column's own
+       centering and shoves both off-screen to the side. */
+    .about-photo-stack{ position: static; transform: none; }
+    .about-stack-pill{
+      position: static;
+      transform: none;
+      flex-direction: column;
+      gap: 12px;
+      border-width: 6px;
+      padding: 10px 12px;
+    }
+  }
 </style>
 </head>
 <body>

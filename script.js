@@ -140,7 +140,11 @@ if (navToggle && navLinks) {
   const board = document.querySelector('.about-board');
   if (!wrap || !board) return;
   function updateScale(){
-    board.style.transform = `scale(${wrap.clientWidth / 880})`;
+    // Below 640px the board switches to its own dedicated 375x928 mobile canvas (a real
+    // Figma-designed mobile layout, not the 880x500 desktop board scaled down — see
+    // index.html's mobile media query), so it scales against that reference width instead.
+    const canvasWidth = window.innerWidth <= 640 ? 375 : 880;
+    board.style.transform = `scale(${wrap.clientWidth / canvasWidth})`;
   }
   updateScale();
   window.addEventListener('resize', updateScale);

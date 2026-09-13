@@ -7,10 +7,17 @@
  * tokens locked below — no inline hex/rgb permitted outside this block. Case-study palette lives in its own
  * block below so every case study (CloudLex, RecordXtract, and future ones) draws from the same system.
  */
-@font-face{ font-family:'Satoshi'; src:url('fonts/Satoshi-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
-@font-face{ font-family:'Satoshi'; src:url('fonts/Satoshi-Medium.woff2') format('woff2'); font-weight:500; font-style:normal; font-display:swap; }
-@font-face{ font-family:'Satoshi'; src:url('fonts/Satoshi-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
-@font-face{ font-family:'Satoshi'; src:url('fonts/Satoshi-Black.woff2') format('woff2'); font-weight:900; font-style:normal; font-display:swap; }
+/* font-display:optional (not swap): with swap, a cold load briefly renders the fallback
+   system font then snaps to Satoshi mid-paint the instant it lands, and since that timing
+   depends on cache/network state, the page visibly renders "differently" run to run. These
+   are small self-hosted woff2s (~24-28KB) now preloaded in every page's <head>, so they're
+   normally ready before first paint — optional tells the browser to wait one short frame for
+   that already-in-flight font and skip it (staying on the fallback for that render entirely)
+   rather than swap partway through, trading a rare fallback-font render for a consistent one. */
+@font-face{ font-family:'Satoshi'; src:url('fonts/Satoshi-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:optional; }
+@font-face{ font-family:'Satoshi'; src:url('fonts/Satoshi-Medium.woff2') format('woff2'); font-weight:500; font-style:normal; font-display:optional; }
+@font-face{ font-family:'Satoshi'; src:url('fonts/Satoshi-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:optional; }
+@font-face{ font-family:'Satoshi'; src:url('fonts/Satoshi-Black.woff2') format('woff2'); font-weight:900; font-style:normal; font-display:optional; }
 
 :root{
   --paper: #FFFFFF;
@@ -93,6 +100,11 @@
     --sp-8: 80px;
     --case-gap: 56px;
   }
+  /* Case-study body copy (.cs-lede/.cs-list at a fixed 19px, .cs-meta-value at 18px) had
+     the same no-mobile-override gap as the title above — scaled down a notch so paragraphs
+     don't run as large on a phone as they do on a 1440px screen. */
+  .cs-lede, .cs-list{ font-size: 17px; }
+  .cs-meta-value{ font-size: 16px; }
 }
 
 *{ box-sizing: border-box; }
@@ -328,7 +340,11 @@ p{ margin: 0; }
 .cs-title{
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 48px;
+  /* Fixed 48px (see spec note above) was a desktop-only value with no mobile reduction,
+     so a 375px phone rendered the same size as a 1440px screen — 4-5 wrapped lines eating
+     most of the first viewport. Same clamp() pattern as .hero-headline: stays pinned at
+     the spec's 48px above ~600px, scales down smoothly below it. */
+  font-size: clamp(28px, 8vw, 48px);
   line-height: 1.2;
   color: var(--ink);
   margin-top: 28px;

@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sumaiya Deshpande — Product Designer</title>
 <meta name="description" content="Product designer with 4+ years across WealthTech, LegalTech, Healthcare and Generative AI. Selected work and beliefs.">
+<link rel="preload" href="fonts/Satoshi-Medium.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/Satoshi-Bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -303,12 +305,44 @@
   .about-stack-icon-wrap img{ display: block; width: 100%; height: 100%; }
   .about-stack-icon-wrap:hover{ transform: scale(1.12); }
 
-  /* No mobile override here any more: the board is scaled via JS (script.js, based on
+  /* No mobile override up to this point: the board is scaled via JS (script.js, based on
      wrap.clientWidth/880) rather than a CSS-only trick, so keeping .about-board-wrap at the
-     same 880:500 aspect-ratio on every screen size makes the scaled canvas fill it exactly at
-     any width — the old 3:4 mobile override + a hardcoded -250px margin-top were left over
-     from the pre-JS-scale version and, once the board is always scaled, made it float ~130px
-     too high inside a wrap now taller than its content needs, leaving a large empty gap below. */
+     same 880:500 aspect-ratio fills it exactly at any width above 640px (the old 3:4 mobile
+     override + a hardcoded -250px margin-top were left over from a pre-JS-scale version and,
+     once the board is always scaled, made it float ~130px too high in a wrap now taller than
+     its content needs).
+
+     Below 640px this is a dedicated mobile layout per Figma node 451:43768 (a real design,
+     not a mechanically-scaled desktop board) — earlier passes here (a plain vertical stack,
+     then a 3-pin variant off an earlier/rougher Figma frame) didn't match, so this reuses the
+     exact same technique as the desktop board (a fixed reference canvas, scaled via JS to
+     fill the wrap) with this design's own 375x928 canvas and its own hand positions, rather
+     than the 880x500 one — script.js's updateScale() picks whichever reference width applies
+     based on viewport. All four pins stay, in a 2x2 grid (Tennis+Music, then Reading+Type
+     Experiments) below the photo stack, and drop their desktop tilt (that only reads well
+     spread across a wide canvas); the shuffle-stack widget and stack-pill keep their
+     structure, just repositioned/resized to this design's spec. */
+  @media (max-width: 640px){
+    .about-board-wrap{ aspect-ratio: 375 / 928; }
+    .about-board{ width: 375px; height: 928px; }
+    .about-pin--tennis{ left: 55px; top: 444px; width: auto; height: auto; transform: none; }
+    .about-pin--tennis .about-pin-photo{ width: 86px; }
+    .about-pin--music{ left: 206px; top: 432px; width: auto; height: auto; }
+    .about-pin--music .about-pin-photo{ width: 117px; }
+    .about-pin--reading{ left: 38px; top: 591px; width: auto; height: auto; transform: none; }
+    .about-pin--reading .about-pin-photo{ width: 108px; }
+    .about-pin--type{ left: 217px; top: 607px; width: auto; height: auto; transform: none; }
+    .about-pin--type .about-pin-photo{ width: 88px; }
+    .about-photo-stack{ top: 74px; }
+    .about-stack-pill{
+      top: 797px;
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px;
+      border-width: 8px;
+    }
+    .about-stack-icon-wrap{ width: 32px; height: 32px; }
+  }
 </style>
 </head>
 <body>

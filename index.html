@@ -310,54 +310,38 @@
      same 880:500 aspect-ratio fills it exactly at any width above 640px (the old 3:4 mobile
      override + a hardcoded -250px margin-top were left over from a pre-JS-scale version and,
      once the board is always scaled, made it float ~130px too high in a wrap now taller than
-     its content needs). Below 640px, per explicit design feedback, the landscape 880x500
-     canvas got too cramped to read (tiny pins/photos on a narrow phone) — this switches the
-     whole board to a real vertical layout instead of just scaling the same canvas down:
-     everything drops out of the fixed-canvas/absolute-position system into normal document
-     flow (script.js's updateScale() bails out below 640px so it doesn't fight this with an
-     inline transform), pins keep their identity but lose their desktop tilt/overlap since
-     that only reads well spread across a wide canvas, and the shuffle-stack + stack-pill
-     widgets are left at their native pixel sizes (they're self-contained, not tied to the
-     880 canvas) with just enough side padding on the wrap to fit the widest one (302px). */
+     its content needs).
+
+     Below 640px this is a dedicated mobile layout per Figma node 451:43768 (a real design,
+     not a mechanically-scaled desktop board) — earlier passes here (a plain vertical stack,
+     then a 3-pin variant off an earlier/rougher Figma frame) didn't match, so this reuses the
+     exact same technique as the desktop board (a fixed reference canvas, scaled via JS to
+     fill the wrap) with this design's own 375x928 canvas and its own hand positions, rather
+     than the 880x500 one — script.js's updateScale() picks whichever reference width applies
+     based on viewport. All four pins stay, in a 2x2 grid (Tennis+Music, then Reading+Type
+     Experiments) below the photo stack, and drop their desktop tilt (that only reads well
+     spread across a wide canvas); the shuffle-stack widget and stack-pill keep their
+     structure, just repositioned/resized to this design's spec. */
   @media (max-width: 640px){
-    .about-board-wrap{
-      aspect-ratio: auto;
-      padding: 32px 10px 40px;
-    }
-    .about-board{
-      position: static;
-      width: 100%;
-      height: auto;
-      transform: none !important;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 32px;
-    }
-    .about-board-title{ position: static; transform: none; }
-    .about-pin--reading, .about-pin--type, .about-pin--music, .about-pin--tennis{
-      position: static;
-      transform: none;
-      width: auto; height: auto;
-      justify-content: flex-start;
-    }
-    .about-pin--reading .about-pin-photo{ width: 140px; }
-    .about-pin--type .about-pin-photo{ width: 140px; }
-    .about-pin--music .about-pin-photo{ width: 150px; }
-    .about-pin--tennis .about-pin-photo{ width: 110px; }
-    /* .about-photo-stack and .about-stack-pill are centered on desktop via left:50% +
-       transform:translateX(-50%) — translateX keeps applying even once position:static makes
-       left a no-op, so without cancelling it here it doubles up against the flex column's own
-       centering and shoves both off-screen to the side. */
-    .about-photo-stack{ position: static; transform: none; }
+    .about-board-wrap{ aspect-ratio: 375 / 928; }
+    .about-board{ width: 375px; height: 928px; }
+    .about-pin--tennis{ left: 55px; top: 444px; width: auto; height: auto; transform: none; }
+    .about-pin--tennis .about-pin-photo{ width: 86px; }
+    .about-pin--music{ left: 206px; top: 432px; width: auto; height: auto; }
+    .about-pin--music .about-pin-photo{ width: 117px; }
+    .about-pin--reading{ left: 38px; top: 591px; width: auto; height: auto; transform: none; }
+    .about-pin--reading .about-pin-photo{ width: 108px; }
+    .about-pin--type{ left: 217px; top: 607px; width: auto; height: auto; transform: none; }
+    .about-pin--type .about-pin-photo{ width: 88px; }
+    .about-photo-stack{ top: 74px; }
     .about-stack-pill{
-      position: static;
-      transform: none;
+      top: 797px;
       flex-direction: column;
-      gap: 12px;
-      border-width: 6px;
-      padding: 10px 12px;
+      gap: 16px;
+      padding: 16px;
+      border-width: 8px;
     }
+    .about-stack-icon-wrap{ width: 32px; height: 32px; }
   }
 </style>
 </head>

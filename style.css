@@ -78,6 +78,23 @@
   --video-dark: #14212B;
 }
 
+/* ---- Mobile spacing scale ----
+   The larger section-rhythm tokens (--sp-5 through --sp-8, plus --case-gap) were desktop-only
+   values with no mobile reduction anywhere in the site, so a 375px-wide phone stacked the same
+   64-150px gaps as a 1440px desktop — a lot of empty scrolling between sections. Roughly halves
+   the larger tokens under 640px; --sp-1 through --sp-3 stay as-is since they're already tight
+   enough not to need it. */
+@media (max-width: 640px){
+  :root{
+    --sp-4: 24px;
+    --sp-5: 32px;
+    --sp-6: 40px;
+    --sp-7: 56px;
+    --sp-8: 80px;
+    --case-gap: 56px;
+  }
+}
+
 *{ box-sizing: border-box; }
 html{ scroll-behavior: smooth; overflow-x: clip; }
 body{ overflow-x: clip; }

@@ -303,10 +303,12 @@
   .about-stack-icon-wrap img{ display: block; width: 100%; height: 100%; }
   .about-stack-icon-wrap:hover{ transform: scale(1.12); }
 
-  @media (max-width: 640px){
-    .about-board-wrap{ aspect-ratio: 3 / 4; }
-    .about-board{ top: 50%; margin-top: -250px; }
-  }
+  /* No mobile override here any more: the board is scaled via JS (script.js, based on
+     wrap.clientWidth/880) rather than a CSS-only trick, so keeping .about-board-wrap at the
+     same 880:500 aspect-ratio on every screen size makes the scaled canvas fill it exactly at
+     any width — the old 3:4 mobile override + a hardcoded -250px margin-top were left over
+     from the pre-JS-scale version and, once the board is always scaled, made it float ~130px
+     too high inside a wrap now taller than its content needs, leaving a large empty gap below. */
 </style>
 </head>
 <body>
@@ -355,7 +357,7 @@
       <div class="work-list">
         <a href="selfwealth.html" class="work-card work-card--nda reveal">
           <div class="work-card-media">
-            <video src="videos/selfwealth-intro-animation.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+            <video class="scroll-video" src="videos/selfwealth-intro-animation.webm" muted loop playsinline preload="metadata" aria-hidden="true"></video>
             <span class="work-card-nda-badge" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" stroke-width="2"/></svg>
               <span>Under NDA</span>
@@ -369,7 +371,7 @@
 
         <a href="work-cloudlex.html" class="work-card reveal">
           <div class="work-card-media">
-            <video src="videos/cloudlex-intro-splash.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+            <video class="scroll-video" src="videos/cloudlex-intro-splash.webm" muted loop playsinline preload="metadata" aria-hidden="true"></video>
           </div>
           <div class="work-card-info">
             <span class="work-name">Making a case management platform role-aware and increasing adoption by 80%</span>
@@ -379,7 +381,7 @@
 
         <a href="recordxtract.html" class="work-card reveal">
           <div class="work-card-media">
-            <video src="videos/recordxtract-intro-splash.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+            <video class="scroll-video" src="videos/recordxtract-intro-splash.webm" muted loop playsinline preload="metadata" aria-hidden="true"></video>
           </div>
           <div class="work-card-info">
             <span class="work-name">0 → 1 design of a retrieval platform that reduced turnaround times by 40%.</span>
